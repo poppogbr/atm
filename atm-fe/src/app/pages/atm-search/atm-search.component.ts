@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { Atm } from './atm.model';
 import { AtmSearchService } from './atm-search.service';
-import { distinctUntilChanged, tap, mergeMap, delay } from 'rxjs/operators';
+import { distinctUntilChanged, tap, mergeMap, delay, debounceTime, startWith } from 'rxjs/operators';
 import { LoadingService } from '@core/services/loading.service';
 
 @Component({
@@ -31,17 +31,13 @@ export class AtmSearchComponent implements OnInit {
     this.searchForm = this.formBuilder.group({
       filter: new FormControl(null)
     });
-  }
-
-  search() {
-      this.atms$ = (this.filter) ?
-        of(this.filter).pipe(
-          delay(1000),
-          distinctUntilChanged(),
-          tap(() => this.loadingService.announceAsVisible()),
-          mergeMap(filter => this.atmSearchService.search(filter)),
-          tap(() => this.loadingService.announceAsNotVisible())
-        ) : of([]);
+    this.atms$ = this.searchForm.get('filter').valueChanges.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      tap(() => this.loadingService.announceAsVisible()),
+      mergeMap(filter => (filter) ? this.atmSearchService.search(filter) : of([])),
+      tap(() => this.loadingService.announceAsNotVisible())
+    );
   }
 
   get filter(): string {
