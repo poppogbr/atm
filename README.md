@@ -1,29 +1,23 @@
 To develop this project i used the following stack:
 * Java 8
-* JAX-RS
-* JPA
-* Dozer
-* Junit
-* Mockito
+* Micronaut
+* Angular 8
+* Bootstrap
 
-I divided the architecture into three layers:
-* Input layer with REST interfaces
-* Layer with EJB of business logic
-* Access layer to the DB with DAOs
+The BE was implemented in this way:
+* With Micronaut I created a filter to manage the login (only one user is coded for this test).
+* I checked the JWT security token
+* ATM information is retrieved from dropbox and saved in a cache with Micronaut and updated every 5 minutes.
 
-The services shown are:
-* Create a new task: POST - /rest/task/new
-* List of open tasks for specified user: GET /rest/task/all/open/{userId}
-* Details of a specific task: GET - /rest/task/detail/{uniqueId}
-* Close a task: PUT - /rest/task/close/{uniqueId}
+The FE was implemented in this way:
+* I split installed in "core" and "pages" modules
+* "core" contains all the main parts used by the application
+* "pages" contains the pages of the application
+* I used the lazy loading mode to load only the pages visited.
+* I created a BaseService to generalize REST calls.
 
-Installation:
-* Make the mvn clean install command
-* Recover target task-0.0.1-SNAPSHOT.war
-* Download Payara Server 5.193.1 (Full) from https://www.payara.fish/software/downloads/all-downloads/
-* Create a JDBC Connection Pools and define the connection to the DB
-* Create a JDBC Resources called jdbc/taskList and associate the pool created above
-* Deploy war
-* Restart Payara
-* To install the schema call the REST service http://<URL>:<PORT>/task-list/rest/installer/schema
-* Start SoapUI and import the xml with rest services from soapUI Project
+For instructions launch:
+* run-atm-be.cmd
+* run-atm-fe.cmd
+* once the last executable is finished, a chrome page will open with CORS disabled.
+* you can access the application with user: sherlock pass: password
