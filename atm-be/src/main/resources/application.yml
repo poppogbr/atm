@@ -1,0 +1,38 @@
+---
+micronaut:
+  application:
+    name: atm
+  server:
+    port: 8090
+    cors:
+      enabled: true
+      single-header: true
+
+---
+micronaut:
+  caches:
+    atms-cache:
+      expire-after-write: 5m
+
+---
+micronaut:
+  security:
+    enabled: true
+    endpoints:
+      login:
+        enabled: true
+      logout:
+        enabled: true
+    token:
+      jwt:
+        enabled: true
+        bearer:
+          enabled: false
+        cookie:
+          enabled: true
+          cookie-name: token
+          cookie-path: /
+        signatures:
+          secret:
+            generator:
+              secret: cGxlYXNlQ2hhbmdlVGhpc1NlY3JldEZvckFOZXdPbmU= 

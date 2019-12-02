@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <form [formGroup]="searchForm">
+        <div class="form-group form-inline">
+            Full text search: <input class="form-control" type="text" formControlName="filter" (keyup)="search()"/>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Street</th>
+                <th scope="col">Housenumber</th>
+                <th scope="col">Postalcode</th>
+                <th scope="col">City</th>
+                <th scope="col">Lat</th>
+                <th scope="col">Lng</th>
+                <th scope="col">Distance</th>
+                <th scope="col">type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let atm of atms$ | async">
+                <td><ngb-highlight [result]="atm.address && atm.address.street" [term]="filter"></ngb-highlight></td>
+                <td><ngb-highlight [result]="atm.address && atm.address.housenumber" [term]="filter"></ngb-highlight></td>
+                <td><ngb-highlight [result]="atm.address && atm.address.postalcode" [term]="filter"></ngb-highlight></td>
+                <td><ngb-highlight [result]="atm.address && atm.address.city" [term]="filter"></ngb-highlight></td>
+                <td><ngb-highlight [result]="atm.address && atm.address.geoLocation && atm.address.geoLocation.lat" [term]="filter"></ngb-highlight></td>
+                <td><ngb-highlight [result]="atm.address && atm.address.geoLocation && atm.address.geoLocation.lng" [term]="filter"></ngb-highlight></td>
+                <td><ngb-highlight [result]="atm.distance | number" [term]="filter"></ngb-highlight></td>
+                <td><ngb-highlight [result]="atm.type" [term]="filter"></ngb-highlight></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
